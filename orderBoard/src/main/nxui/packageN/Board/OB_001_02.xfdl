@@ -1,0 +1,129 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="OB_001_02" width="400" height="220" titletext="주문수정팝업" onload="OB_001_02_onload">
+    <Layouts>
+      <Layout height="220" width="400">
+        <Static id="sta01_00_00" taborder="0" text="주문상태" left="24" top="28" width="116" height="34" font="14px/normal &quot;Gulim&quot;" textAlign="center"/>
+        <Combo id="cbo_ordStatNm" taborder="1" text="" left="176" top="31" width="170" height="31" value="" index="-1" innerdataset="ds_ordStatCombo" codecolumn="CD_VAL1" datacolumn="CD_NM1" displaynulltext="선택"/>
+        <Static id="sta01_00_00_00" taborder="2" text="주문상품" left="24" top="67" width="116" height="34" font="14px/normal &quot;Gulim&quot;" textAlign="center"/>
+        <Combo id="cbo_itemNm" taborder="3" text="선택" left="176" top="71" width="170" height="31" value="" index="-1" innerdataset="ds_itemCombo" codecolumn="CD_VAL1" datacolumn="CD_NM1" displaynulltext="선택"/>
+        <Button id="btn_chgOrd" taborder="4" text="주문수정" left="45" top="130" width="120" height="61" enable="true" visible="true" onclick="btn_chgOrd_onclick"/>
+        <Button id="btn_exit" taborder="5" text="닫기" left="197" top="130" width="120" height="61" enable="true" visible="true" onclick="btn_exit_onclick"/>
+      </Layout>
+    </Layouts>
+    <Script type="xscript5.1"><![CDATA[this.OB_001_02_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+	this.fn_setOrdStatCbo();
+	
+	this.fn_setItemCbo();
+	
+	alert(this.getOwnerFrame().ordNo);
+};
+
+this.btn_chgOrd_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{	
+	this.ds_updOrd.clearData();
+	this.ds_updOrd.addRow();
+	this.ds_updOrd.setColumn(0, "ORD_STAT_CD", this.cbo_ordStatNm.value);
+	this.ds_updOrd.setColumn(0, "ITEM_CD", this.cbo_itemNm.value);
+	this.ds_updOrd.setColumn(0, "ORD_NO", this.getOwnerFrame().ordNo);
+	
+	trace(this.ds_updOrd.getColumn(0, "ORD_STAT_CD"));
+	trace(this.ds_updOrd.getColumn(0, "ITEM_CD"));
+	trace(this.ds_updOrd.getColumn(0, "ORD_NO"));
+	
+	var strSvcId = "updateOrdList";
+	var strSvcUrl = "updateOrdList.do";
+	var inData = "ds_updOrd=ds_updOrd";
+	var outData = "";
+	
+	var strArg = "";
+	var callBackFnc = "fnCallback";
+	
+	this.gfnTransaction(strSvcId, strSvcUrl, inData, outData, strArg, callBackFnc);
+};
+
+this.btn_exit_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	//alert("닫기 버튼 클릭");
+	this.close();
+};
+
+this.fn_setOrdStatCbo = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.ds_searchCombo.clearData();
+	this.ds_searchCombo.addRow();
+	this.ds_searchCombo.setColumn(0, "CD_VAL", "001");
+	
+	var strSvcId = "selectCommonCode";
+	var strSvcUrl = "selectCommonCode.do";
+	var inData = "ds_search=ds_searchCombo";
+	var outData = "ds_ordStatCombo=ds_commonCode";
+	
+	var strArg = "";
+	var callBackFnc = "fnCallback";
+	
+	this.gfnTransaction(strSvcId, strSvcUrl, inData, outData, strArg, callBackFnc);
+};
+
+this.fn_setItemCbo = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	var strSvcId = "selectItemList";
+	var strSvcUrl = "selectItemList.do";
+	var inData = "";
+	var outData = "ds_itemCombo=ds_itemCombo";
+	
+	var strArg = "";
+	var callBackFnc = "fnCallback";
+	
+	this.gfnTransaction(strSvcId, strSvcUrl, inData, outData, strArg, callBackFnc);
+};
+
+this.fnCallback = function(svcID, errorCode, errorMsg)
+{
+	if(errorCode < 0){
+		alert("작업 실패 에러 코드 : " + errorCode);
+		return 0;
+	}
+	switch(svcID)
+	{
+		case "selectCommonCode" :
+			trace("주문상태 콤보박스 세팅 완료");
+			break;
+		case "selectItemList" :
+			trace("주문상품 콤보박스 세팅 완료");
+			break;
+		case "updateOrdList" :
+			alert("주문 수정 완료");
+			this.close();
+			break;
+	}
+};]]></Script>
+    <Objects>
+      <Dataset id="ds_updOrd">
+        <ColumnInfo>
+          <Column id="ORD_STAT_CD" type="STRING" size="256"/>
+          <Column id="ITEM_CD" type="STRING" size="256"/>
+          <Column id="ORD_NO" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_searchCombo">
+        <ColumnInfo>
+          <Column id="CD_VAL" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_ordStatCombo">
+        <ColumnInfo>
+          <Column id="CD_VAL1" type="STRING" size="256"/>
+          <Column id="CD_NM1" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_itemCombo">
+        <ColumnInfo>
+          <Column id="CD_VAL1" type="STRING" size="256"/>
+          <Column id="CD_NM1" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+    </Objects>
+  </Form>
+</FDL>

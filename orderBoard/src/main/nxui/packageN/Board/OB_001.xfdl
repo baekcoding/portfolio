@@ -1,0 +1,261 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="OB_001" width="1280" height="720" titletext="주문게시판" background="" visible="true" onload="OB_001_onload">
+    <Layouts>
+      <Layout height="720" width="1280">
+        <Static id="sta02" taborder="16" left="100" top="-1" width="1140" height="100" border="1px solid black" text=""/>
+        <Static id="sta00" taborder="0" text="검색 조건" left="0" top="-1" width="100" height="100" font="bold 16px/normal &quot;Gulim&quot;" textAlign="center" background="ivory" border="1px solid black" enable="true"/>
+        <Button id="btn_regOrd" taborder="1" text="주문등록" left="20" top="111" width="80" height="23" enable="true" visible="true" onclick="btn_regOrd_onclick"/>
+        <Edit id="edt_ordNo" taborder="2" left="220" top="4" width="200" height="35" inputtype="number" onchanged="edt_ordNo_onchanged"/>
+        <Static id="sta01" taborder="3" text="주문 번호" left="109" top="6" width="101" height="34" font="14px/normal &quot;Gulim&quot;" textAlign="center"/>
+        <CheckBox id="chk_cmpYn" taborder="4" left="557" top="3" width="81" height="40" onchanged="chk_cmpYn_onchanged"/>
+        <Static id="sta01_00" taborder="5" text="법인고객여부" left="439" top="6" width="101" height="34" font="14px/normal &quot;Gulim&quot;" textAlign="center"/>
+        <Combo id="cbo_ordStat" taborder="6" text="" left="556" top="52" width="144" height="36" value="" index="-1" codecolumn="CD_VAL1" datacolumn="CD_NM1" displaynulltext="선택" innerdataset="ds_ordStatCombo" onitemchanged="cbo_ordStat_onitemchanged"/>
+        <Static id="sta01_00_00" taborder="7" text="주문 상태" left="430" top="53" width="116" height="34" font="14px/normal &quot;Gulim&quot;" textAlign="center"/>
+        <Radio id="rdo_custGb" taborder="8" left="820" top="6" width="174" height="40" innerdataset="innerdataset" codecolumn="codecolumn" datacolumn="datacolumn" direction="vertical">
+          <Dataset id="innerdataset">
+            <ColumnInfo>
+              <Column id="codecolumn" size="256"/>
+              <Column id="datacolumn" size="256"/>
+            </ColumnInfo>
+            <Rows>
+              <Row>
+                <Col id="codecolumn">A</Col>
+                <Col id="datacolumn">개인</Col>
+              </Row>
+              <Row>
+                <Col id="codecolumn">B</Col>
+                <Col id="datacolumn">법인</Col>
+              </Row>
+              <Row>
+                <Col id="codecolumn">C</Col>
+                <Col id="datacolumn">임직원</Col>
+              </Row>
+            </Rows>
+          </Dataset>
+        </Radio>
+        <Static id="sta01_00_01" taborder="9" text="고객 구분" left="710" top="8" width="101" height="34" font="14px/normal &quot;Gulim&quot;" textAlign="center"/>
+        <Grid id="grd_ordList" taborder="10" left="4" top="150" width="866" height="449" oncelldblclick="grd_ordList_oncelldblclick" binddataset="ds_list">
+          <Formats>
+            <Format id="default">
+              <Columns>
+                <Column size="110"/>
+                <Column size="65"/>
+                <Column size="60"/>
+                <Column size="80"/>
+                <Column size="60"/>
+                <Column size="90"/>
+                <Column size="140"/>
+                <Column size="110"/>
+                <Column size="150"/>
+              </Columns>
+              <Rows>
+                <Row size="35" band="head"/>
+                <Row size="35"/>
+              </Rows>
+              <Band id="head">
+                <Cell text="주문번호"/>
+                <Cell col="1" text="주문상태"/>
+                <Cell col="2" text="고객번호"/>
+                <Cell col="3" text="고객명"/>
+                <Cell col="4" text="고객구분"/>
+                <Cell col="5" text="전화번호"/>
+                <Cell col="6" text="주소"/>
+                <Cell col="7" text="상품명"/>
+                <Cell col="8" text="주문일시"/>
+              </Band>
+              <Band id="body">
+                <Cell text="bind:ORD_NO" textAlign="center"/>
+                <Cell col="1" text="bind:ORD_STAT_NM" textAlign="center"/>
+                <Cell col="2" text="bind:CUST_NO" textAlign="center"/>
+                <Cell col="3" text="bind:CUST_NM" textAlign="center"/>
+                <Cell col="4" text="bind:CUST_GBCD_NM" textAlign="center"/>
+                <Cell col="5" text="bind:PHONE" textAlign="center"/>
+                <Cell col="6" text="bind:ADDR" textAlign="center"/>
+                <Cell col="7" text="bind:ITEM_NM" textAlign="center"/>
+                <Cell col="8" text="bind:REG_DT" textAlign="center" calendardateformat="yyyy-MM-dd HH:mm:ss"/>
+              </Band>
+            </Format>
+          </Formats>
+        </Grid>
+        <Static id="sta01_01" taborder="11" text="고객명" left="110" top="53" width="101" height="34" font="14px/normal &quot;Gulim&quot;" textAlign="center"/>
+        <Edit id="edt_custNm" taborder="12" left="220" top="53" width="200" height="35" inputtype="normal" onchanged="edt_custNm_onchanged"/>
+        <Button id="btn_updOrd" taborder="13" text="주문수정" left="109" top="111" width="80" height="23" enable="true" visible="true" onclick="btn_updOrd_onclick"/>
+        <Button id="btn_delOrd" taborder="14" text="주문삭제" left="200" top="111" width="80" height="23" enable="true" visible="true" onclick="btn_delOrd_onclick"/>
+        <Button id="btn_selectOrd" taborder="15" text="조회" left="1135" top="6" width="98" height="86" background="#05599d" color="white" font="bold 14px/normal &quot;Gulim&quot;" onclick="btn_selectOrd_onclick"/>
+      </Layout>
+    </Layouts>
+    <Script type="xscript5.1"><![CDATA[
+this.OB_001_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+	// alert("onload 함수 실행");
+	this.ds_searchCombo.clearData();
+	this.ds_searchCombo.addRow();
+	this.ds_searchCombo.setColumn(0, "CD_VAL", "001");
+	
+	var strSvcId = "selectCommonCode";
+	var strSvcUrl = "selectCommonCode.do";
+	var inData = "ds_search=ds_searchCombo";
+	var outData = "ds_ordStatCombo=ds_commonCode";
+	
+	var strArg = "";
+	var callBackFnc = "fnCallback";
+	
+	this.gfnTransaction(strSvcId, strSvcUrl, inData, outData, strArg, callBackFnc);
+};
+
+this.btn_selectOrd_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	/*alert("주문리스트 조회");*/
+	this.ds_searchList.clearData();
+	this.ds_searchList.addRow();
+	this.ds_searchList.setColumn(0, "ORD_NO", this.edt_ordNo.value);
+	this.ds_searchList.setColumn(0, "CUST_NM", this.edt_custNm.value);
+	this.ds_searchList.setColumn(0, "COMP_YN", this.chk_cmpYn.value);
+	this.ds_searchList.setColumn(0, "ORD_STAT_CD", this.cbo_ordStat.value);
+	this.ds_searchList.setColumn(0, "CUST_GBCD", this.rdo_custGb.value);
+	
+	trace("로그 남기기(크롬의 console.log기능과 같음)");
+	trace("ORD_NO      : " + this.ds_searchList.getColumn(0, "ORD_NO"));
+	trace("CUST_NM     : " + this.ds_searchList.getColumn(0, "CUST_NM"));
+	trace("COMP_YN     : " + this.ds_searchList.getColumn(0, "COMP_YN"));
+	trace("ORD_STAT_CD : " + this.ds_searchList.getColumn(0, "ORD_STAT_CD"));
+	trace("CUST_GBCD   : " + this.ds_searchList.getColumn(0, "CUST_GBCD"));
+	
+	var strSvcId = "selectOrdList";
+	var strSvcUrl = "selectOrdList.do";
+	var inData = "ds_searchList=ds_searchList";
+	var outData = "ds_list=ds_list";
+	
+	var strArg = "";
+	var callBackFnc = "fnCallback";
+	
+	this.gfnTransaction(strSvcId, strSvcUrl, inData, outData, strArg, callBackFnc);
+};
+
+this.btn_regOrd_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	//alert("주문등록 팝업 오픈");
+	var oArg = {};
+	var oOption = {};
+	var sPopupCallBack = "fnPopupCallback";
+	this.gfnOpenPopup("popup", "Board::OB_001_01.xfdl", oArg, sPopupCallBack, oOption);
+};
+
+this.btn_updOrd_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	var ordNo = this.ds_list.getColumn(this.ds_list.rowposition, "ORD_NO");
+	
+	var oArg = {ordNo:ordNo};
+	var oOption = {};
+	var sPopupCallBack = "fnPopupCallback";
+	this.gfnOpenPopup("popup", "Board::OB_001_02.xfdl", oArg, sPopupCallBack, oOption);
+};
+
+this.btn_delOrd_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	//alert("주문삭제 진행");
+	var ordNo = this.ds_list.getColumn(this.ds_list.rowposition, "ORD_NO");
+	
+	this.ds_delList.clearData();
+	this.ds_delList.addRow();
+	this.ds_delList.setColumn(0, "ORD_NO", ordNo);
+	
+	var strSvcId = "deleteOrdList";
+	var strSvcUrl = "deleteOrdList.do";
+	var inData = "ds_delList=ds_delList";
+	var outData = "";
+	
+	var strArg = "";
+	var callBackFnc = "fnCallback";
+	
+	this.gfnTransaction(strSvcId, strSvcUrl, inData, outData, strArg, callBackFnc);
+};
+
+this.grd_ordList_oncelldblclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
+{
+	// 그리드 더블클릭 시 진행할 스크립트 작성
+};
+
+this.chk_cmpYn_onchanged = function(obj:nexacro.CheckBox,e:nexacro.CheckBoxChangedEventInfo)
+{
+	alert("onchanged 함수 실행 완료");
+};
+
+this.fnCallback = function(svcID, errorCode, errorMsg)
+{
+	if(errorCode < 0){
+		alert("작업 실패 에러 코드 : " + errorCode);
+		return 0;
+	}
+	
+	switch(svcID)
+	{
+	case "selectCommonCode" :
+		this.ds_ordStatCombo.insertRow(0);
+		this.ds_ordStatCombo.setColumn(0, "CD_VAL1", "");
+		this.ds_ordStatCombo.setColumn(0, "CD_NM1", "전체");
+		break;
+	case "deleteOrdList" :
+		alert("삭제 완료");
+		break;
+	}
+};
+
+this.cbo_ordStat_onitemchanged = function(obj:nexacro.Combo,e:nexacro.ItemChangeEventInfo)
+{
+	
+};
+
+this.edt_custNm_onchanged = function(obj:nexacro.Edit,e:nexacro.ChangeEventInfo)
+{
+	
+};
+
+this.edt_ordNo_onchanged = function(obj:nexacro.Edit,e:nexacro.ChangeEventInfo)
+{
+	
+};
+]]></Script>
+    <Objects>
+      <Dataset id="ds_searchCombo">
+        <ColumnInfo>
+          <Column id="CD_VAL" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_ordStatCombo">
+        <ColumnInfo>
+          <Column id="CD_VAL1" type="STRING" size="256"/>
+          <Column id="CD_NM1" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_searchList">
+        <ColumnInfo>
+          <Column id="ORD_NO" type="STRING" size="256"/>
+          <Column id="CUST_NM" type="STRING" size="256"/>
+          <Column id="COMP_YN" type="STRING" size="256"/>
+          <Column id="ORD_STAT_CD" type="STRING" size="256"/>
+          <Column id="CUST_GBCD" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_list">
+        <ColumnInfo>
+          <Column id="ORD_NO" type="STRING" size="256"/>
+          <Column id="ORD_STAT_NM" type="STRING" size="256"/>
+          <Column id="CUST_NO" type="STRING" size="256"/>
+          <Column id="CUST_NM" type="STRING" size="256"/>
+          <Column id="CUST_GBCD_NM" type="STRING" size="256"/>
+          <Column id="PHONE" type="STRING" size="256"/>
+          <Column id="ADDR" type="STRING" size="256"/>
+          <Column id="ITEM_NM" type="STRING" size="256"/>
+          <Column id="REG_DT" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_delList">
+        <ColumnInfo>
+          <Column id="ORD_NO" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+    </Objects>
+  </Form>
+</FDL>
